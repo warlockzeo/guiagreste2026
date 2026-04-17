@@ -1,0 +1,127 @@
+.post-card {
+  background-color: var(--color-white);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-gray-200);
+  overflow: hidden;
+  transition: box-shadow var(--transition-fast);
+}
+
+[data-theme='dark'] .post-card {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.post-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.post-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+}
+
+.post-card__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  background-color: var(--color-gray-100);
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .post-card__avatar {
+  background-color: var(--color-surface-hover);
+}
+
+.post-card__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.post-card__name {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+.post-card__meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.post-card__image-container {
+  position: relative;
+  width: 100%;
+  background-color: var(--color-gray-100);
+}
+
+[data-theme='dark'] .post-card__image-container {
+  background-color: var(--color-surface-hover);
+}
+
+.post-card__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.post-card__content {
+  padding: var(--spacing-3) var(--spacing-4);
+}
+
+.post-card__caption {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.post-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-top: 1px solid var(--color-gray-100);
+}
+
+[data-theme='dark'] .post-card__footer {
+  border-top-color: var(--color-border);
+}
+
+.post-card__stat {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.post-card__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.post-card__action {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2) var(--spacing-3);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.post-card__action:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-orange);
+}

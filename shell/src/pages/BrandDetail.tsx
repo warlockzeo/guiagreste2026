@@ -109,14 +109,40 @@ export function BrandDetail() {
     }
   };
 
-  const formatWhatsApp = (whatsapp: string) => {
-    return whatsapp.replace(/\D/g, '');
+  const openPhone = () => {
+    if (brand?.phone) {
+      const phone = brand.phone.replace(/\D/g, '');
+      window.location.href = `tel:+55${phone}`;
+    }
+  };
+
+  const openEmail = () => {
+    if (brand?.email) {
+      window.location.href = `mailto:${brand.email}`;
+    }
   };
 
   const openInstagram = () => {
     if (brand?.instagram) {
       const username = brand.instagram.replace('@', '');
       window.open(`https://instagram.com/${username}`, '_blank');
+    }
+  };
+
+  const openFacebook = () => {
+    if (brand?.facebook) {
+      const page = brand.facebook.replace('@', '').replace(' ', '');
+      window.open(`https://facebook.com/${page}`, '_blank');
+    }
+  };
+
+  const openWebsite = () => {
+    if (brand?.website) {
+      let url = brand.website;
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+      }
+      window.open(url, '_blank');
     }
   };
 
@@ -213,6 +239,8 @@ export function BrandDetail() {
                 <motion.div
                   className={styles['brand-detail__contact-card']}
                   whileHover={{ y: -4 }}
+                  onClick={openPhone}
+                  style={{ cursor: 'pointer' }}
                 >
                   <div className={styles['brand-detail__contact-icon']} style={{ backgroundColor: '#1E3A8A' }}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
@@ -229,6 +257,7 @@ export function BrandDetail() {
                   className={styles['brand-detail__contact-card']}
                   whileHover={{ y: -4 }}
                   onClick={openWhatsApp}
+                  style={{ cursor: 'pointer' }}
                 >
                   <div className={styles['brand-detail__contact-icon']} style={{ backgroundColor: '#25D366' }}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
@@ -236,7 +265,7 @@ export function BrandDetail() {
                     </svg>
                   </div>
                   <div className={styles['brand-detail__contact-content']}>
-                    <span className={styles['brand-detail__contact-value']}>{formatWhatsApp(brand.whatsapp)}</span>
+                    <span className={styles['brand-detail__contact-value']}>{brand.whatsapp}</span>
                   </div>
                 </motion.div>
               )}
@@ -244,6 +273,8 @@ export function BrandDetail() {
                 <motion.div
                   className={styles['brand-detail__contact-card']}
                   whileHover={{ y: -4 }}
+                  onClick={openEmail}
+                  style={{ cursor: 'pointer' }}
                 >
                   <div className={styles['brand-detail__contact-icon']} style={{ backgroundColor: '#EA4335' }}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
@@ -285,6 +316,7 @@ export function BrandDetail() {
                   className={styles['brand-detail__contact-card']}
                   whileHover={{ y: -4 }}
                   onClick={openInstagram}
+                  style={{ cursor: 'pointer' }}
                 >
                   <div className={styles['brand-detail__contact-icon']} style={{ background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' }}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
@@ -296,19 +328,20 @@ export function BrandDetail() {
                   </div>
                 </motion.div>
               )}
-              {brand.email && (
+              {brand.facebook && (
                 <motion.div
                   className={styles['brand-detail__contact-card']}
                   whileHover={{ y: -4 }}
+                  onClick={openFacebook}
+                  style={{ cursor: 'pointer' }}
                 >
-                  <div className={styles['brand-detail__contact-icon']} style={{ backgroundColor: '#EA4335' }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                      <polyline points="22,6 12,13 2,6"/>
+                  <div className={styles['brand-detail__contact-icon']} style={{ backgroundColor: '#1877F2' }}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                     </svg>
                   </div>
                   <div className={styles['brand-detail__contact-content']}>
-                    <span className={styles['brand-detail__contact-value']}>{brand.email}</span>
+                    <span className={styles['brand-detail__contact-value']}>{brand.facebook}</span>
                   </div>
                 </motion.div>
               )}
@@ -316,7 +349,8 @@ export function BrandDetail() {
                 <motion.div
                   className={styles['brand-detail__contact-card']}
                   whileHover={{ y: -4 }}
-                  onClick={() => window.open(brand.website, '_blank')}
+                  onClick={openWebsite}
+                  style={{ cursor: 'pointer' }}
                 >
                   <div className={styles['brand-detail__contact-icon']} style={{ backgroundColor: '#333' }}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">

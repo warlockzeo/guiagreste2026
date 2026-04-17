@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
       params.push(`%${category}%`);
     }
 
-    sql += ' ORDER BY name';
+    sql += ' ORDER BY CASE WHEN plan = \'vip\' THEN 0 ELSE 1 END, name';
 
     const totalResult = all(sql.replace('SELECT *', 'SELECT COUNT(*) as count'), params);
     const total = totalResult[0]?.count || 0;
@@ -120,8 +120,7 @@ router.put('/:id', (req, res) => {
 router.get('/:id/posts', (req, res) => {
   try {
     const { id } = req.params;
-    const { limit = 50, page = 1 } = req.query;
-    const offset = (Number(page) - 1) * Number(limit);
+    let { limit = 50, page = 1 } = req.query;
 
     const brand = get('SELECT * FROM brands WHERE id = ?', [id]);
     if (!brand) {
@@ -131,9 +130,12 @@ router.get('/:id/posts', (req, res) => {
     const totalResult = get('SELECT COUNT(*) as count FROM posts WHERE brandId = ?', [id]);
     const total = totalResult?.count || 0;
 
+    const effectiveLimit = brand.plan !== 'vip' ? Math.min(Number(limit), 5) : Number(limit);
+    const offset = (Number(page) - 1) * effectiveLimit;
+
     const posts = all(
       'SELECT * FROM posts WHERE brandId = ? ORDER BY createdAt DESC LIMIT ? OFFSET ?',
-      [id, Number(limit), offset]
+      [id, effectiveLimit, offset]
     );
 
     const postsWithBrand = posts.map((post) => ({
@@ -142,7 +144,14 @@ router.get('/:id/posts', (req, res) => {
       brandLogo: brand.logo,
     }));
 
-    res.json({ posts: postsWithBrand, total, page: Number(page), limit: Number(limit) });
+    res.json({ 
+      posts: postsWithBrand, 
+      total, 
+      page: Number(page), 
+      limit: effectiveLimit,
+      plan: brand.plan,
+      maxPosts: brand.plan === 'vip' ? null : 5
+    });
   } catch (error) {
     console.error('Erro ao buscar posts:', error);
     res.status(500).json({ error: 'Erro interno' });
@@ -161,6 +170,16 @@ router.post('/:id/posts', (req, res) => {
     const brand = get('SELECT * FROM brands WHERE id = ?', [id]);
     if (!brand) {
       return res.status(404).json({ error: 'Marca não encontrada' });
+    }
+
+    const postCount = get('SELECT COUNT(*) as count FROM posts WHERE brandId = ?', [id])?.count || 0;
+    
+    if (brand.plan !== 'vip' && postCount >= 5) {
+      return res.status(403).json({ 
+        error: 'Limite de fotos atingido',
+        message: 'Plano Grátis permite apenas 5 fotos. Faça upgrade para VIP!',
+        upgradeUrl: '/plans'
+      });
     }
 
     const result = run(

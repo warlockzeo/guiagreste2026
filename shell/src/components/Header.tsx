@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
 import { api } from '../utils/api';
+import logoImg from '../../assets/logo.png';
 import styles from './Header.module.css';
 
 interface Follower {
@@ -19,10 +20,25 @@ export function Header() {
   const { toggleTheme } = useThemeStore();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showFollowers, setShowFollowers] = useState(false);
+  const [showRegisterDropdown, setShowRegisterDropdown] = useState(false);
   const [followers, setFollowers] = useState<Follower[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
+  const registerRef = useRef<HTMLDivElement>(null);
 
   const isBrand = (user as { type?: string })?.type === 'brand';
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+      if (registerRef.current && !registerRef.current.contains(event.target as Node)) {
+        setShowRegisterDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (menuOpen && isBrand && user?.id) {
@@ -45,25 +61,11 @@ export function Header() {
     setMenuOpen(false);
   };
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   return (
     <header className={styles.header}>
       <div className={styles.header__container}>
         <Link to="/" className={styles.header__logo}>
-          <svg className={styles.header__logoIcon} viewBox="0 0 36 36" fill="none">
-            <rect width="36" height="36" rx="10" fill="#f97316"/>
-            <path d="M18 8L12 14L18 20L12 26L18 32L24 26L18 20L24 14L18 8Z" fill="white"/>
-          </svg>
-          <span>Guiagreste</span>
+          <img src={logoImg} alt="Guiagreste" className={styles.header__logoImg} />
         </Link>
 
         <nav className={styles.header__nav}>
@@ -72,6 +74,9 @@ export function Header() {
           </Link>
           <Link to="/catalog" className={styles.header__link}>
             Catálogo
+          </Link>
+          <Link to="/plans" className={styles.header__link}>
+            Planos
           </Link>
         </nav>
 
@@ -237,24 +242,81 @@ export function Header() {
             </div>
           ) : (
             <>
-              <Link to="/login">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`${styles.header__btn} ${styles.header__btnOutline}`}
-                >
-                  Entrar
-                </motion.button>
+              <Link to="/login" className={`${styles.header__authBtn} ${styles['header__authBtn--login']}`}>
+                Entrar
               </Link>
-              <Link to="/register">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`${styles.header__btn} ${styles.header__btnPrimary}`}
+              <div className={styles.header__registerDropdown} ref={registerRef}>
+                <button
+                  className={`${styles.header__authBtn} ${styles['header__authBtn--register']}`}
+                  onClick={() => setShowRegisterDropdown(!showRegisterDropdown)}
                 >
                   Cadastrar
-                </motion.button>
-              </Link>
+                  <svg
+                    className={`${styles.header__arrowSmall} ${showRegisterDropdown ? styles.header__arrowOpen : ''}`}
+                    width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                  >
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                <AnimatePresence>
+                  {showRegisterDropdown && (
+                    <motion.div
+                      className={styles.header__registerMenu}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <Link
+                        to="/register?type=user"
+                        className={styles.header__registerItem}
+                        onClick={() => setShowRegisterDropdown(false)}
+                      >
+                        <span className={styles.header__registerIcon}>👤</span>
+                        <div>
+                          <span className={styles.header__registerLabel}>Usuário</span>
+                          <span className={styles.header__registerDesc}>Comprar e seguir lojas</span>
+                        </div>
+                      </Link>
+                      <div className={styles.header__registerDivider} />
+                      <Link
+                        to="/register?type=brand&plan=free"
+                        className={styles.header__registerItem}
+                        onClick={() => setShowRegisterDropdown(false)}
+                      >
+                        <span className={styles.header__registerIcon}>🏪</span>
+                        <div>
+                          <span className={styles.header__registerLabel}>Loja - Grátis</span>
+                          <span className={styles.header__registerDesc}>5 fotos, sem destaque</span>
+                        </div>
+                      </Link>
+                      <Link
+                        to="/register?type=brand&plan=vip"
+                        className={`${styles.header__registerItem} ${styles['header__registerItem--vip']}`}
+                        onClick={() => setShowRegisterDropdown(false)}
+                      >
+                        <span className={styles.header__registerIcon}>⭐</span>
+                        <div>
+                          <span className={styles.header__registerLabel}>Loja - VIP</span>
+                          <span className={styles.header__registerDesc}>Fotos ilimitadas + Destaque</span>
+                        </div>
+                      </Link>
+                      <div className={styles.header__registerDivider} />
+                      <Link
+                        to="/plans"
+                        className={styles.header__registerItem}
+                        onClick={() => setShowRegisterDropdown(false)}
+                      >
+                        <span className={styles.header__registerIcon}>📋</span>
+                        <div>
+                          <span className={styles.header__registerLabel}>Ver Planos</span>
+                          <span className={styles.header__registerDesc}>Compare as opções</span>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </>
           )}
         </div>

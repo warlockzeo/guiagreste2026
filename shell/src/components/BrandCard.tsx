@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { api } from '../utils/api';
 import { useAuthStore } from '../store/authStore';
 import { useToastStore } from '../store/toastStore';
-import type { Brand } from '../types';
+import type { Brand, Post } from '../types';
 import styles from './BrandCard.module.css';
 
 interface BrandCardProps {
@@ -16,10 +16,24 @@ export function BrandCard({ brand }: BrandCardProps) {
   const { user, isAuthenticated } = useAuthStore();
   const { addToast } = useToastStore();
   const [isFollowing, setIsFollowing] = useState(false);
+  const [latestPost, setLatestPost] = useState<Post | null>(null);
 
   useEffect(() => {
     checkIfFollowing();
+    fetchLatestPost();
   }, [user]);
+
+  const fetchLatestPost = async () => {
+    try {
+      const res = await api.get(`/api/brands/${brand.id}/posts?limit=1`);
+      const posts = res.data.posts || [];
+      if (posts.length > 0) {
+        setLatestPost(posts[0]);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar último post:', error);
+    }
+  };
 
   const getRandomTime = () => {
     const times = ['2 min', '15 min', '1h', '3h', '5h', '1 dia'];
@@ -115,7 +129,7 @@ export function BrandCard({ brand }: BrandCardProps) {
       <div className={styles['feed-card__image-container']}>
         <Link to={`/brand/${brand.id}`}>
           <img
-            src={brand.logo || 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&h=400&fit=crop'}
+            src={latestPost?.image || 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&h=400&fit=crop'}
             alt={brand.name}
             className={styles['feed-card__image']}
           />

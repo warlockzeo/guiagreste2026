@@ -6,6 +6,7 @@ import { BrandCard } from '../components/BrandCard';
 import { PostCard } from '../components/PostCard';
 import type { Brand, Post } from '../types';
 import styles from './Home.module.css';
+import logoImg from '../../assets/logo.png';
 
 const CAROUSEL_IMAGES = [
   'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1920&h=600&fit=crop',
@@ -80,10 +81,10 @@ export function Home() {
         </div>
         <div className={styles.home__heroContent}>
           <h1 className={styles.home__title}>
-            Guiagreste <span className={styles.home__titleAccent}>⭐</span>
+            <img src={logoImg} alt="Guiagreste" className={styles.header__logoImg} />
           </h1>
           <p className={styles.home__subtitle}>
-            Descubra as melhores marcas de roupas do agreste de Pernambuco
+            As melhores marcas de roupas de Pernambuco
           </p>
           <form className={styles.home__search} onSubmit={handleSearch}>
             <input

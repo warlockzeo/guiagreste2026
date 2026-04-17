@@ -30,11 +30,12 @@
   font-weight: 700;
   color: var(--color-orange);
   letter-spacing: -0.02em;
+  text-decoration: none;
 }
 
-.header__logo-icon {
-  width: 36px;
-  height: 36px;
+.header__logoImg {
+  height: 40px;
+  object-fit: contain;
 }
 
 .header__nav {
@@ -60,7 +61,35 @@
 .header__actions {
   display: flex;
   align-items: center;
-  gap: var(--spacing-3);
+  gap: var(--spacing-1);
+}
+
+.header__authBtn {
+  padding: var(--spacing-2) var(--spacing-4);
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.header__authBtn--login {
+  color: var(--color-text-secondary);
+}
+
+.header__authBtn--login:hover {
+  color: var(--color-orange);
+  background-color: var(--color-surface-hover);
+}
+
+.header__authBtn--register {
+  background-color: var(--color-orange);
+  color: white;
+  font-weight: 600;
+}
+
+.header__authBtn--register:hover {
+  background-color: var(--color-orange-dark);
 }
 
 .header__theme-toggle {
@@ -123,38 +152,6 @@
 [data-theme='dark'] .header__theme-knob .header__theme-icon--alt {
   display: block;
   color: var(--color-orange);
-}
-
-.header__btn {
-  padding: var(--spacing-2) var(--spacing-5);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  transition: all var(--transition-fast);
-}
-
-.header__btn--outline {
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border);
-  background: transparent;
-}
-
-.header__btn--outline:hover {
-  border-color: var(--color-orange);
-  color: var(--color-orange);
-  background-color: rgba(249, 115, 22, 0.05);
-}
-
-.header__btn--primary {
-  background-color: var(--color-orange);
-  color: white;
-  box-shadow: var(--shadow-sm);
-}
-
-.header__btn--primary:hover {
-  background-color: var(--color-orange-dark);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
 }
 
 .header__userMenu {
@@ -371,6 +368,106 @@
   color: white;
   border-radius: var(--radius-sm);
   font-weight: 500;
+}
+
+.header__registerDropdown {
+  position: relative;
+}
+
+.header__arrowSmall {
+  margin-left: 4px;
+  color: inherit;
+  transition: transform var(--transition-fast);
+}
+
+.header__arrowOpen {
+  transform: rotate(180deg);
+}
+
+.header__registerMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 240px;
+  background-color: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-gray-100);
+  overflow: hidden;
+  z-index: 200;
+}
+
+[data-theme='dark'] .header__registerMenu {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.header__registerItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.header__registerItem:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.header__registerItem--vip {
+  background: linear-gradient(135deg, var(--color-orange) 0%, #ea580c 100%);
+  color: white;
+}
+
+.header__registerItem--vip:hover {
+  background: linear-gradient(135deg, #ea580c 0%, var(--color-orange-dark) 100%);
+}
+
+.header__registerIcon {
+  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-gray-100);
+  border-radius: var(--radius-md);
+}
+
+.header__registerItem--vip .header__registerIcon {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.header__registerLabel {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.header__registerItem--vip .header__registerLabel {
+  color: white;
+}
+
+.header__registerDesc {
+  display: block;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.header__registerItem--vip .header__registerDesc {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.header__registerDivider {
+  height: 1px;
+  background-color: var(--color-gray-100);
+  margin: var(--spacing-1) 0;
+}
+
+[data-theme='dark'] .header__registerDivider {
+  background-color: var(--color-border);
 }
 
 @media (max-width: 768px) {

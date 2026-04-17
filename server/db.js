@@ -26,6 +26,7 @@ const TABLES_SQL = `
     website TEXT,
     cnpj TEXT,
     whatsapp TEXT,
+    plan TEXT DEFAULT 'free',
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 
@@ -162,6 +163,7 @@ async function seed() {
       website: '',
       cnpj: '12.345.678/0001-90',
       whatsapp: '(81) 99999-1234',
+      plan: 'vip',
     },
     {
       name: 'Estilo Masculino',
@@ -177,6 +179,7 @@ async function seed() {
       website: 'www.estilomasculino.com.br',
       cnpj: '23.456.789/0001-01',
       whatsapp: '(81) 99999-2345',
+      plan: 'free',
     },
     {
       name: 'Kids Fashion',
@@ -192,6 +195,7 @@ async function seed() {
       website: '',
       cnpj: '34.567.890/0001-12',
       whatsapp: '(81) 99999-3456',
+      plan: 'free',
     },
     {
       name: 'Acessórios da Moda',
@@ -207,6 +211,7 @@ async function seed() {
       website: '',
       cnpj: '45.678.901/0001-23',
       whatsapp: '(81) 99999-4567',
+      plan: 'vip',
     },
     {
       name: 'Sapatilha & CIA',
@@ -222,6 +227,7 @@ async function seed() {
       website: '',
       cnpj: '56.789.012/0001-34',
       whatsapp: '(81) 99999-5678',
+      plan: 'free',
     },
     {
       name: 'Beach Style PE',
@@ -237,6 +243,7 @@ async function seed() {
       website: 'www.beachstylepe.com.br',
       cnpj: '67.890.123/0001-45',
       whatsapp: '(81) 99999-6789',
+      plan: 'vip',
     },
     {
       name: 'Fitness Pro Wear',
@@ -252,6 +259,7 @@ async function seed() {
       website: '',
       cnpj: '78.901.234/0001-56',
       whatsapp: '(81) 99999-7890',
+      plan: 'free',
     },
     {
       name: 'Jeans House',
@@ -267,6 +275,7 @@ async function seed() {
       website: '',
       cnpj: '89.012.345/0001-67',
       whatsapp: '(81) 99999-8901',
+      plan: 'vip',
     },
     {
       name: 'Lingerie Premium',
@@ -282,6 +291,7 @@ async function seed() {
       website: 'www.lingeriepremium.com.br',
       cnpj: '90.123.456/0001-78',
       whatsapp: '(81) 99999-9012',
+      plan: 'free',
     },
     {
       name: 'Casual & Co',
@@ -297,14 +307,15 @@ async function seed() {
       website: '',
       cnpj: '01.234.567/0001-89',
       whatsapp: '(81) 99999-0123',
+      plan: 'free',
     },
   ];
 
   for (const brand of brands) {
     db.run(
-      `INSERT INTO brands (name, email, password, phone, address, description, category, logo, instagram, facebook, website, cnpj, whatsapp)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [brand.name, brand.email, brand.password, brand.phone, brand.address, brand.description, brand.category, brand.logo, brand.instagram, brand.facebook, brand.website, brand.cnpj, brand.whatsapp]
+      `INSERT INTO brands (name, email, password, phone, address, description, category, logo, instagram, facebook, website, cnpj, whatsapp, plan)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [brand.name, brand.email, brand.password, brand.phone, brand.address, brand.description, brand.category, brand.logo, brand.instagram, brand.facebook, brand.website, brand.cnpj, brand.whatsapp, brand.plan]
     );
   }
 

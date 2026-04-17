@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { api } from '../utils/api';
 import { useAuthStore } from '../store/authStore';
@@ -20,8 +20,10 @@ const CATEGORIES = [
 
 export function Register() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login } = useAuthStore();
-  const [isBrand, setIsBrand] = useState(false);
+  const [isBrand, setIsBrand] = useState(searchParams.get('type') === 'brand');
+  const [selectedPlan, setSelectedPlan] = useState(searchParams.get('plan') || 'free');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -34,6 +36,24 @@ export function Register() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const type = searchParams.get('type');
+    const plan = searchParams.get('plan') || 'free';
+    setIsBrand(type === 'brand');
+    setSelectedPlan(plan);
+    setFormData({
+      name: '',
+      email: '',
+      password: '',
+      phone: '',
+      address: '',
+      description: '',
+      categories: [],
+      cnpj: '',
+    });
+    setError('');
+  }, [searchParams]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -145,6 +165,11 @@ export function Register() {
 
           {isBrand && (
             <>
+              {selectedPlan === 'vip' && (
+                <div className={styles.auth__planBadge}>
+                  ⭐ Plano VIP selecionado - Fotos ilimitadas + Destaque
+                </div>
+              )}
               <div className={styles.auth__field}>
                 <label className={styles.auth__label}>Telefone</label>
                 <input
@@ -202,7 +227,7 @@ export function Register() {
                         fontSize: '0.875rem',
                         cursor: 'pointer',
                         backgroundColor: formData.categories.includes(cat)
-                          ? 'var(--color-blue)'
+                          ? 'var(--color-orange)'
                           : 'transparent',
                         color: formData.categories.includes(cat)
                           ? 'white'

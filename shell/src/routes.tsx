@@ -9,6 +9,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Messages } from './pages/Messages';
 import { Chat } from './pages/Chat';
 import { MyFollows } from './pages/MyFollows';
+import { Plans } from './pages/Plans';
 
 export function AppRoutes() {
   return (
@@ -18,6 +19,7 @@ export function AppRoutes() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/catalog" element={<Catalog />} />
+          <Route path="/plans" element={<Plans />} />
           <Route path="/brand/:id" element={<BrandDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

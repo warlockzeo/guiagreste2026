@@ -191,7 +191,7 @@
   margin: 0 auto;
   padding: var(--spacing-6) var(--spacing-4);
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-4);
 }
 
